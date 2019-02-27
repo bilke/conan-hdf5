@@ -1,6 +1,6 @@
 import os
 import shutil
-from conans import ConanFile, AutoToolsBuildEnvironment, tools
+from conans import ConanFile, AutoToolsBuildEnvironment, tools, VisualStudioBuildEnvironment
 from conans.errors import ConanException
 
 
@@ -103,7 +103,10 @@ class Hdf5Conan(ConanFile):
 
             static_option = "No" if self.options.shared else "Yes"
             try:
-                self.run("ctest -S HDF5config.cmake,BUILD_GENERATOR=VS201764,STATIC_ONLY=%s -C %s -VV -O hdf5.log" % (static_option, self.settings.build_type))
+                env_build = VisualStudioBuildEnvironment(self)
+                with tools.environment_append(env_build.vars):
+                    vcvars = tools.vcvars_command(self.settings)
+                    self.run("%s && ctest -S HDF5config.cmake,BUILD_GENERATOR=VS201764,STATIC_ONLY=%s -C %s -VV -O hdf5.log" % (vcvars, static_option, self.settings.build_type))
             except ConanException:
                 # Allowed to "fail" on having no tests to run, because we purposely aren't building the tests
                 pass
