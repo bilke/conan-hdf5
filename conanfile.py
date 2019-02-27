@@ -103,7 +103,7 @@ class Hdf5Conan(ConanFile):
 
             static_option = "No" if self.options.shared else "Yes"
             try:
-                self.run("ctest -S HDF5config.cmake,BUILD_GENERATOR=VS201564,STATIC_ONLY=%s -C %s -V -O hdf5.log" % (static_option, self.settings.build_type))
+                self.run("ctest -S HDF5config.cmake,BUILD_GENERATOR=VS201764,STATIC_ONLY=%s -C %s -VV -O hdf5.log" % (static_option, self.settings.build_type))
             except ConanException:
                 # Allowed to "fail" on having no tests to run, because we purposely aren't building the tests
                 pass
