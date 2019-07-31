@@ -21,11 +21,13 @@ class Hdf5Conan(ConanFile):
     requires = "zlib/1.2.11@conan/stable"
     options = {
         "cxx": [True, False],
+        "fPIC": [True, False],
         "shared": [True, False],
         "parallel": [True, False]
     }
     default_options = (
         "cxx=False",
+        "fPIC=True"
         "shared=False",
         "parallel=False",
         "zlib:shared=False"
@@ -41,6 +43,8 @@ class Hdf5Conan(ConanFile):
         if self.options.cxx and self.options.parallel:
             msg = "The cxx and parallel options are not compatible"
             raise ConfigurationException(msg)
+        if self.settings.compiler == 'Visual Studio':
+            del self.options.fPIC
 
     def source(self):
         if tools.os_info.is_windows:
@@ -126,6 +130,7 @@ class Hdf5Conan(ConanFile):
             os.mkdir("install")
 
             env_build = AutoToolsBuildEnvironment(self)
+            env_build.fpic = self.options.fPIC
             env_build.configure(
                 configure_dir=self.source_subfolder,
                 args=configure_args
