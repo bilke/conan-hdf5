@@ -16,7 +16,7 @@ class Hdf5Conan(ConanFile):
     description = "HDF5 C and C++ libraries"
     license = "https://support.hdfgroup.org/ftp/HDF5/releases/COPYING"
     url = "https://github.com/ess-dmsc/conan-hdf5"
-    exports = ["files/CHANGES", "files/HDF5options.cmake"]
+    exports = ["files/CHANGES", "files/HDF5options.cmake", "FindHDF5.cmake"]
     settings = "os", "compiler", "build_type", "arch"
     requires = "zlib/1.2.11@conan/stable"
     options = {
@@ -194,12 +194,7 @@ class Hdf5Conan(ConanFile):
         os.chdir(cwd)
 
     def package(self):
-        self.copy("*", dst="bin", src="install/bin")
-        self.copy("*", dst="include", src="install/include")
-        self.copy("*", dst="lib", src="install/lib")
-        if not tools.os_info.is_windows:
-            self.copy("LICENSE.*", src=self.source_subfolder)
-            self.copy("CHANGES.*", src=self.source_subfolder)
+        self.copy("*", src="install")
 
     def package_info(self):
         self.cpp_info.libs = ["hdf5", "hdf5_hl"]
