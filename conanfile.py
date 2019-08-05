@@ -2,11 +2,7 @@ import os
 import shutil
 from conans import ConanFile, AutoToolsBuildEnvironment, tools
 from conans.errors import ConanException
-
-
-class ConfigurationException(Exception):
-    pass
-
+from conans.errors import ConanInvalidConfiguration
 
 class Hdf5Conan(ConanFile):
     name = "hdf5"
@@ -40,10 +36,15 @@ class Hdf5Conan(ConanFile):
 
 
     def configure(self):
+        if not self.options.cxx:
+            del self.settings.compiler.libcxx
+            del self.settings.compiler.cppstd
         if self.options.cxx and self.options.parallel:
             msg = "The cxx and parallel options are not compatible"
-            raise ConfigurationException(msg)
-        if self.settings.compiler == 'Visual Studio':
+            raise ConanInvalidConfiguration(msg)
+
+    def config_options(self):
+        if self.settings.os == "Windows":
             del self.options.fPIC
 
     def source(self):
@@ -197,8 +198,6 @@ class Hdf5Conan(ConanFile):
         self.copy("*", src="install")
 
     def package_info(self):
-        self.cpp_info.libs = ["hdf5", "hdf5_hl"]
-        if self.options.cxx:
-            self.cpp_info.libs.append("hdf5_cpp")
+        self.cpp_info.libs = tools.collect_libs(self)
         if tools.os_info.is_windows:
             self.cpp_info.defines = ["H5_BUILT_AS_DYNAMIC_LIB"]
