@@ -14,7 +14,7 @@ class Hdf5Conan(ConanFile):
     url = "https://github.com/ess-dmsc/conan-hdf5"
     exports = ["files/CHANGES", "files/HDF5options.cmake", "FindHDF5.cmake"]
     settings = "os", "compiler", "build_type", "arch"
-    requires = "zlib/1.2.11@conan/stable"
+    requires = "zlib/1.2.11"
     options = {
         "cxx": [True, False],
         "fPIC": [True, False],
@@ -23,7 +23,7 @@ class Hdf5Conan(ConanFile):
     }
     default_options = (
         "cxx=False",
-        "fPIC=True"
+        "fPIC=True",
         "shared=False",
         "parallel=False",
         "zlib:shared=False"
