@@ -16,7 +16,7 @@ class Hdf5Conan(ConanFile):
     description = "HDF5 C and C++ libraries"
     license = "https://support.hdfgroup.org/ftp/HDF5/releases/COPYING"
     url = "https://github.com/ess-dmsc/conan-hdf5"
-    exports = ["files/CHANGES", "files/HDF5options.cmake"]
+    exports = ["files/CHANGES", "files/HDF5options.cmake", "files/HDF5config.cmake"]
     settings = "os", "compiler", "build_type", "arch"
     requires = "zlib/1.2.11@conan/stable"
     options = {
@@ -97,6 +97,10 @@ class Hdf5Conan(ConanFile):
             shutil.copyfile(
                 os.path.join(self.source_folder, "files", "HDF5options.cmake"),
                 "HDF5options.cmake"
+            )
+            shutil.copyfile(
+                os.path.join(self.source_folder, "files", "HDF5config.cmake"),
+                "HDF5config.cmake"
             )
 
             static_option = "No" if self.options.shared else "Yes"
