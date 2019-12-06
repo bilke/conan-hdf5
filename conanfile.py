@@ -12,7 +12,7 @@ class Hdf5Conan(ConanFile):
     description = "HDF5 C and C++ libraries"
     license = "https://support.hdfgroup.org/ftp/HDF5/releases/COPYING"
     url = "https://github.com/ess-dmsc/conan-hdf5"
-    exports = ["files/CHANGES", "files/HDF5options.cmake", "FindHDF5.cmake"]
+    exports = ["files/CHANGES", "files/HDF5options.cmake"]
     settings = "os", "compiler", "build_type", "arch"
     requires = "zlib/1.2.11"
     options = {
